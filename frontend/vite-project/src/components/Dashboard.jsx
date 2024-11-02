@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styles from "./Dashboard.module.css";
 import { useUser } from "../UserContext"; // Assuming correct path for context
 import logo from "../assets/logo.png";
-import logout from "../assets/logout.png";
+import logout from "../assets/Logout.png";
 import People from "../assets/People.png";
 import remove from "../assets/remove.png";
 import deleteimg from "../assets/delete.png";
