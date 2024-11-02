@@ -24,7 +24,7 @@ const Settings = () => {
     console.log("Starting form submission"); // Add this line
     console.log("Form data:", formData); // Log the data to verify it's correct
     try {
-      const response = await fetch("http://localhost:8080/api/user/update", {
+      const response = await fetch("https://task-manager-0yqb.onrender.com/api/user/update", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

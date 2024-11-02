@@ -83,8 +83,8 @@ const TaskModal = ({
 
     try {
       const url = TaskToEdit
-        ? `http://localhost:8080/api/user/edit/${TaskToEdit._id}` // Update task if TaskToEdit exists
-        : "http://localhost:8080/api/user/save"; // Create new task otherwise
+        ? `https://task-manager-0yqb.onrender.com/api/user/edit/${TaskToEdit._id}` // Update task if TaskToEdit exists
+        : "https://task-manager-0yqb.onrender.com/api/user/save"; // Create new task otherwise
 
       const response = await fetch(url, {
         method: TaskToEdit ? "PUT" : "POST",

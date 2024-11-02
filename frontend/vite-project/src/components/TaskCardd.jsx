@@ -62,7 +62,7 @@ const TaskCardd = ({
   const onDelete = async () => {
     try {
       console.log(task._id);
-      await axios.delete(`http://localhost:8080/api/user/tasks/${task._id}`);
+      await axios.delete(`https://task-manager-0yqb.onrender.com/api/user/tasks/${task._id}`);
       setrefreshTasks((prev) => !prev); // Toggle to re-fetch tasks
       setIsMenuOpen(false);
     } catch (error) {

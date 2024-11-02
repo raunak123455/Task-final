@@ -15,7 +15,7 @@ const TaskPage = () => {
     const fetchTask = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8080/api/user/tasks/${taskId}`
+          `https://task-manager-0yqb.onrender.com/api/user/tasks/${taskId}`
         );
         setTask(response.data);
       } catch (error) {
