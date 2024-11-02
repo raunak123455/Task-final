@@ -23,7 +23,7 @@ const Analytics = ({
     const fetchAnalyticsData = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8080/api/user/analytics"
+          "https://task-manager-0yqb.onrender.com/api/user/analytics"
         );
         setAnalyticsData(response.data);
       } catch (error) {
