@@ -1,0 +1,67 @@
+.analytics {
+  padding: 20px;
+  width: 80%; /* Ensure full width for analytics section */
+  max-width: 1200px; /* Limit max width for better readability */
+  margin: 0 auto; /* Center content */
+}
+
+.analyticsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Two columns */
+  gap: 20px;
+}
+
+.analyticsBox {
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  width: 87%;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.analyticsBox ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.analyticsBox li {
+  display: flex;
+  justify-content: flex-start; /* Align items to the left */
+  align-items: center; /* Vertically align the dot and text */
+  padding: 10px 0;
+  border-bottom: 1px solid #ccc;
+  color: #333;
+}
+
+.analyticsBox li span {
+  margin-left: auto; /* Align numbers to the right */
+  font-weight: bold;
+  color: #333;
+}
+
+.analyticsBox li::before {
+  content: "";
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background-color: #90c4cc; /* Background color for the dot */
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+@media (max-width: 500px) {
+  .analyticsGrid {
+    display: grid;
+    grid-template-columns: 1fr; /* Two columns */
+    gap: 20px;
+  }
+
+  .analytics {
+    width: 100%;
+  }
+
+  .analyticsBox {
+    width: 70%;
+  }
+}

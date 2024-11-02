@@ -1,0 +1,199 @@
+.container {
+  display: flex;
+  min-height: 100vh;
+  width: 1534px;
+}
+
+.errorText {
+  color: red;
+}
+
+.leftSection {
+  width: 50%;
+  background-color: #00b3b3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  color: white;
+  position: relative;
+}
+
+.astronautImage {
+  width: 200px;
+  height: 200px;
+  margin-bottom: 1.5rem;
+  z-index: 1;
+}
+
+.welcomeText {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.subText {
+  font-size: 1.1rem;
+}
+
+.rightSection {
+  width: 50%;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.loginContainer {
+  width: 100%;
+  max-width: 400px;
+}
+
+.loginTitle {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  color: #333;
+}
+
+.formGroup {
+  margin-bottom: 1.5rem;
+}
+
+.inputGroup {
+  position: relative;
+}
+
+.inputimg {
+  width: 30px;
+  margin-top: 8px;
+}
+
+.formInput {
+  width: 100%;
+  height: 50px;
+
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.3s;
+  position: relative;
+}
+
+.formInput > input {
+  color: black;
+  background-color: white;
+  height: 30px;
+  border: none;
+  position: absolute;
+  top: 20%;
+  left: 10%;
+}
+
+.formInput:focus {
+  border-color: #00b3b3;
+  border: none;
+}
+
+.passwordToggle {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #666;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.passwordToggle:hover {
+  color: #333;
+}
+
+.loginButton {
+  width: 100%;
+  padding: 1rem;
+  background-color: #00b3b3;
+  color: white;
+  border: none;
+  border-radius: 29px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.loginButton:hover {
+  background-color: #009999;
+}
+
+.registerContainer {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+.backimg {
+  position: absolute;
+  right: 36%;
+  top: 23%;
+  width: 200px;
+}
+
+.registerText {
+  color: #666;
+  margin-bottom: 0.5rem;
+}
+
+.inputimg1 {
+  width: 20px;
+  margin-top: 8px;
+}
+
+.registerLink {
+  color: #00b3b3;
+  background-color: white;
+  border: 1px solid #00b3b3;
+  font-weight: 500;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0;
+  width: 100%;
+  padding: 1rem;
+  border-radius: 40px;
+}
+
+.registerLink:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .leftSection,
+  .rightSection {
+    width: 100%;
+    padding: 2rem 1rem;
+  }
+
+  .leftSection {
+    min-height: 40vh;
+  }
+
+  .astronautImage {
+    width: 150px;
+    height: 150px;
+  }
+
+  .welcomeText {
+    font-size: 1.75rem;
+  }
+}

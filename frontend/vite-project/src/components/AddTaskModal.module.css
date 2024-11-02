@@ -1,0 +1,196 @@
+/* Modal Styles */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modalContent {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 450px;
+
+  max-width: 90%;
+  position: relative;
+}
+
+.label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  color: black;
+}
+
+.inputtitle,
+.input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 15px;
+  background-color: white;
+  color: black;
+}
+
+.priorityGroup {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.priorityButton,
+.priorityButton2 {
+  padding: 8px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  background-color: white;
+  color: #767575;
+}
+
+.priorityButton.active,
+.priorityButton2.active {
+  border: 2px solid #000;
+}
+
+.checklist {
+  margin-bottom: 15px;
+}
+
+.checklistItem {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.customCheckbox {
+  margin-right: 10px;
+}
+
+.hiddenCheckbox {
+  display: none;
+}
+
+.checkboxCustom {
+  width: 16px;
+  height: 16px;
+  background-color: white;
+  border: 2px solid #ccc;
+  border-radius: 3px;
+  display: inline-block;
+  position: relative;
+}
+
+.checkboxCustom:before {
+  content: "✔";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 12px;
+  color: transparent;
+}
+
+.hiddenCheckbox:checked + .checkboxCustom:before {
+  color: green;
+}
+
+.deleteButton {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.binIcon {
+  width: 20px;
+  height: 20px;
+}
+
+.addNewButton {
+  background-color: transparent;
+  border: none;
+  color: #767575;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+/* Date Picker Styles */
+.dueDatePicker {
+  margin-top: 20px;
+  background-color: white;
+  color: #767575;
+}
+
+.datePickerContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.dueDateInput {
+  width: 100%;
+  padding: 8px;
+  padding-right: 30px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: white;
+}
+
+.calendarIcon {
+  position: absolute;
+  right: 10px;
+  color: #888;
+  cursor: pointer;
+}
+
+/* Modal Buttons */
+.modalActions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.cancelButton {
+  background-color: transparent;
+  border: 2px solid #f00;
+  color: #f00;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.saveButton {
+  background-color: #00aaff;
+  border: none;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+@media (max-width: 500px) {
+  .modalContent {
+    background-color: white;
+    padding: 5px;
+    border-radius: 8px;
+    width: 250px;
+
+    max-width: 90%;
+    position: relative;
+  }
+
+  .inputtitle {
+    width: 60%;
+  }
+}
