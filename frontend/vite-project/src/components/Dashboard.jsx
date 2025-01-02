@@ -14,6 +14,7 @@ import Settings from "./Settings";
 import SharePopup from "./SharePopup";
 import { useNavigate } from "react-router-dom";
 import Modal from "./Modal";
+import { debounce } from "lodash";
 
 const Dashboard = () => {
   const { user, loggedIn, setLoggedIn } = useUser(); // Get user and loggedIn state
@@ -215,31 +216,35 @@ const Dashboard = () => {
     // Optional: Redirect to login or home page
   };
 
-  const handleChangeStatus = async (taskId, newStatus) => {
-    // Update the specific task's status without affecting others
+  const debouncedRefresh = useCallback(
+    debounce((value) => {
+      setrefreshTasks(value);
+    }, 300),
+    []
+  );
 
+  const handleChangeStatus = async (taskId, newStatus) => {
     try {
-      // Make API request to update the task status
+      // Optimistic update
       setTasks((prevTasks) =>
         prevTasks.map((task) =>
           task._id === taskId ? { ...task, status: newStatus } : task
         )
       );
-      console.log(newStatus, "changed baby");
+
       const response = await axios.put(
         `https://task-manager-0yqb.onrender.com/api/user/task/${taskId}/status`,
-        {
-          status: newStatus,
-        }
+        { status: newStatus },
+        { timeout: 5000 } // Add timeout
       );
 
       if (response.status === 200) {
-        // Refresh tasks or update the state to reflect changes
-        setrefreshTasks((prev) => !prev);
-        console.log("Task status updated successfully:", response.data);
+        debouncedRefresh(!refreshTasks);
       }
     } catch (error) {
+      // Rollback on error
       console.error("Failed to update task status:", error);
+      setTasks((prevTasks) => [...prevTasks]); // Revert to previous state
     }
   };
 
