@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styles from "./Dashboard.module.css";
 import { useUser } from "../UserContext"; // Assuming correct path for context
 import logo from "../assets/logo.png";
@@ -75,11 +75,8 @@ const Dashboard = () => {
   }, [userId, isPeopleListUpdated]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      if (!mail) return;
-
+    const fetchTasks = async () => {
       try {
-        // Fetch tasks
         const response = await fetch(
           `https://task-manager-0yqb.onrender.com/api/user/tasks-posted/${mail}`
         );
@@ -94,7 +91,9 @@ const Dashboard = () => {
       }
     };
 
-    fetchData();
+    if (mail) {
+      fetchTasks();
+    }
   }, [mail, TaskToEdit, refreshTasks, selectedPeriod]);
 
   const closeChecklistsInColumn = (columnName) => {
