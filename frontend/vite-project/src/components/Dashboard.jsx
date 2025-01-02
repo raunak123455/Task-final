@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import styles from "./Dashboard.module.css";
 import { useUser } from "../UserContext"; // Assuming correct path for context
 import logo from "../assets/logo.png";
@@ -14,10 +14,6 @@ import Settings from "./Settings";
 import SharePopup from "./SharePopup";
 import { useNavigate } from "react-router-dom";
 import Modal from "./Modal";
-
-
-// Modal component
-
 
 const Dashboard = () => {
   const { user, loggedIn, setLoggedIn } = useUser(); // Get user and loggedIn state
@@ -47,11 +43,9 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (!loggedIn) {
-      // Redirect to login if not logged in
       navigate("/");
-    } else if (userObject) {
+    } else if (userObject?.id) {
       setUserId(userObject.id);
-      console.log(userId);
     }
   }, [loggedIn, userObject, navigate]);
 
@@ -81,30 +75,27 @@ const Dashboard = () => {
   }, [userId, isPeopleListUpdated]);
 
   useEffect(() => {
-    // Define an asynchronous function to fetch tasks
-    const fetchTasks = async () => {
-      console.log(mail);
+    const fetchData = async () => {
+      if (!mail) return;
+
       try {
-        const response = await fetch(`
-          https://task-manager-0yqb.onrender.com/api/user/tasks-posted/${mail}`);
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch tasks.");
-        }
-
+        // Fetch tasks
+        const response = await fetch(
+          `https://task-manager-0yqb.onrender.com/api/user/tasks-posted/${mail}`
+        );
+        if (!response.ok) throw new Error("Failed to fetch tasks");
         const data = await response.json();
-        setTasks(data); // Set fetched tasks in state
-        console.log(tasks);
+        setTasks(data);
+
+        // Filter tasks in the same effect
+        filterTasksByTimePeriod(selectedPeriod);
       } catch (err) {
-        console.log(err); // Handle any errors
+        console.error("Error fetching tasks:", err);
       }
     };
 
-    // Only fetch if email is provided
-    if (mail) {
-      fetchTasks();
-    }
-  }, [mail, TaskToEdit, refreshTasks]);
+    fetchData();
+  }, [mail, TaskToEdit, refreshTasks, selectedPeriod]);
 
   const closeChecklistsInColumn = (columnName) => {
     setChecklistOpenColumns((prev) => ({ ...prev, [columnName]: false }));
@@ -152,20 +143,26 @@ const Dashboard = () => {
 
   // const filteredTasks = filterTasksByTimePeriod(tasks);
 
-  const filterTasksByTimePeriod = async (period) => {
-    try {
-      const response = await axios.get(
-        `https://task-manager-0yqb.onrender.com/api/user/filtertasks`,
-        {
-          params: { period },
-        }
-      );
-      console.log(response.data);
-      setFilteredTasks(response.data);
-    } catch (error) {
-      console.error("Error fetching filtered tasks:", error);
-    }
-  };
+  const filterTasksByTimePeriod = useCallback(
+    async (period) => {
+      try {
+        const response = await axios.get(
+          `https://task-manager-0yqb.onrender.com/api/user/filtertasks`,
+          {
+            params: { period },
+            // Add timeout to prevent hanging
+            timeout: 5000,
+          }
+        );
+        setFilteredTasks(response.data);
+      } catch (error) {
+        console.error("Error fetching filtered tasks:", error);
+        // Fallback to client-side filtering if API fails
+        setFilteredTasks(tasks);
+      }
+    },
+    [tasks]
+  );
 
   // const filteredTasks = filterTasksByTimePeriod(selectedPeriod);
 
@@ -434,6 +431,8 @@ const Dashboard = () => {
                   ))}
                 </div>
               </div>
+
+              {/* <Todo filteredTasks={filteredTasks} /> */}
 
               {/* In Progress Column */}
               <div className={styles.column}>
