@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./Dashboard.module.css";
 import { useUser } from "../UserContext"; // Assuming correct path for context
 import logo from "../assets/logo.png";
@@ -13,8 +13,62 @@ import Analytics from "./Analytics";
 import Settings from "./Settings";
 import SharePopup from "./SharePopup";
 import { useNavigate } from "react-router-dom";
-import Modal from "./Modal";
-import { debounce } from "lodash";
+
+// Modal component
+const Modal = ({ isOpen, onClose, onAdd }) => {
+  const [email, setEmail] = useState("");
+  const [Adding, setAdding] = useState(true);
+
+  if (!isOpen) return null;
+
+  const handleAdd = () => {
+    onAdd(email);
+
+    // setEmail(""); // Clear the input field after adding
+    setAdding(false); // Close the modal after adding
+  };
+
+  const handleClose = () => {
+    setEmail("");
+    setAdding(true);
+    onClose();
+  };
+
+  return (
+    <div className={styles.modalOverlay}>
+      <div className={styles.modalContent}>
+        {Adding ? (
+          <>
+            {" "}
+            <h3>Add people to the board</h3>
+            <input
+              type="email"
+              placeholder="Enter the email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <div className={styles.modalActions}>
+              <button onClick={onClose} className={styles.cancelButton}>
+                Cancel
+              </button>
+              <button onClick={handleAdd} className={styles.addButton}>
+                Add Email
+              </button>
+            </div>{" "}
+          </>
+        ) : (
+          <div>
+            <h2 className={styles.added}> {email} has been added</h2>
+
+            <button onClick={handleClose} className={styles.addButton}>
+              Ok Got it
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
 
 const Dashboard = () => {
   const { user, loggedIn, setLoggedIn } = useUser(); // Get user and loggedIn state
@@ -44,9 +98,11 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (!loggedIn) {
+      // Redirect to login if not logged in
       navigate("/");
-    } else if (userObject?.id) {
+    } else if (userObject) {
       setUserId(userObject.id);
+      console.log(userId);
     }
   }, [loggedIn, userObject, navigate]);
 
@@ -75,27 +131,31 @@ const Dashboard = () => {
   //   fetchPeopleList();
   // }, [userId, isPeopleListUpdated]);
 
-  useEffect(() => {
-    const fetchTasks = async () => {
-      try {
-        const response = await fetch(
-          `https://task-manager-0yqb.onrender.com/api/user/tasks-posted/${mail}`
-        );
-        if (!response.ok) throw new Error("Failed to fetch tasks");
-        const data = await response.json();
-        setTasks(data);
+  // useEffect(() => {
+  //   // Define an asynchronous function to fetch tasks
+  //   const fetchTasks = async () => {
+  //     console.log(mail);
+  //     try {
+  //       const response = await fetch(`
+  //         https://task-manager-0yqb.onrender.com/api/user/tasks-posted/${mail}`);
 
-        // Filter tasks in the same effect
-        filterTasksByTimePeriod(selectedPeriod);
-      } catch (err) {
-        console.error("Error fetching tasks:", err);
-      }
-    };
+  //       if (!response.ok) {
+  //         throw new Error("Failed to fetch tasks.");
+  //       }
 
-    if (mail) {
-      fetchTasks();
-    }
-  }, [mail, TaskToEdit, refreshTasks, selectedPeriod]);
+  //       const data = await response.json();
+  //       setTasks(data); // Set fetched tasks in state
+  //       console.log(tasks);
+  //     } catch (err) {
+  //       console.log(err); // Handle any errors
+  //     }
+  //   };
+
+  //   // Only fetch if email is provided
+  //   if (mail) {
+  //     fetchTasks();
+  //   }
+  // }, [mail, TaskToEdit, refreshTasks]);
 
   const closeChecklistsInColumn = (columnName) => {
     setChecklistOpenColumns((prev) => ({ ...prev, [columnName]: false }));
@@ -110,9 +170,9 @@ const Dashboard = () => {
   //   console.log(checklistOpenColumns);
   // };
 
-  useEffect(() => {
-    console.log(checklistOpenColumns);
-  }, [checklistOpenColumns]);
+  // useEffect(() => {
+  //   console.log(checklistOpenColumns);
+  // }, [checklistOpenColumns]);
 
   const handleShare = (task) => {
     const taskLink = `${window.location.origin}/tasks/${task._id}`;
@@ -143,34 +203,28 @@ const Dashboard = () => {
 
   // const filteredTasks = filterTasksByTimePeriod(tasks);
 
-  const filterTasksByTimePeriod = useCallback(
-    async (period) => {
-      try {
-        const response = await axios.get(
-          `https://task-manager-0yqb.onrender.com/api/user/filtertasks`,
-          {
-            params: { period },
-            // Add timeout to prevent hanging
-            timeout: 12000,
-          }
-        );
-        setFilteredTasks(response.data);
-      } catch (error) {
-        console.error("Error fetching filtered tasks:", error);
-        // Fallback to client-side filtering if API fails
-        setFilteredTasks(tasks);
-      }
-    },
-    [tasks]
-  );
+  const filterTasksByTimePeriod = async (period) => {
+    try {
+      const response = await axios.get(
+        `https://task-manager-0yqb.onrender.com/api/user/filtertasks`,
+        {
+          params: { period },
+        }
+      );
+      console.log(response.data);
+      setFilteredTasks(response.data);
+    } catch (error) {
+      console.error("Error fetching filtered tasks:", error);
+    }
+  };
 
   // const filteredTasks = filterTasksByTimePeriod(selectedPeriod);
 
   // Fetch tasks when component mounts or period changes
-  useEffect(() => {
-    filterTasksByTimePeriod(selectedPeriod);
-    console.log(selectedPeriod);
-  }, [selectedPeriod, refreshTasks]);
+  // useEffect(() => {
+  //   filterTasksByTimePeriod(selectedPeriod);
+  //   console.log(selectedPeriod);
+  // }, [selectedPeriod, refreshTasks]);
 
   const today = new Date();
   const formattedDate = today.toLocaleDateString("en-US", {
@@ -216,35 +270,31 @@ const Dashboard = () => {
     // Optional: Redirect to login or home page
   };
 
-  const debouncedRefresh = useCallback(
-    debounce((value) => {
-      setrefreshTasks(value);
-    }, 300),
-    []
-  );
-
   const handleChangeStatus = async (taskId, newStatus) => {
+    // Update the specific task's status without affecting others
+
     try {
-      // Optimistic update
+      // Make API request to update the task status
       setTasks((prevTasks) =>
         prevTasks.map((task) =>
           task._id === taskId ? { ...task, status: newStatus } : task
         )
       );
-
+      console.log(newStatus, "changed baby");
       const response = await axios.put(
         `https://task-manager-0yqb.onrender.com/api/user/task/${taskId}/status`,
-        { status: newStatus },
-        { timeout: 5000 } // Add timeout
+        {
+          status: newStatus,
+        }
       );
 
       if (response.status === 200) {
-        debouncedRefresh(!refreshTasks);
+        // Refresh tasks or update the state to reflect changes
+        setrefreshTasks((prev) => !prev);
+        console.log("Task status updated successfully:", response.data);
       }
     } catch (error) {
-      // Rollback on error
       console.error("Failed to update task status:", error);
-      setTasks((prevTasks) => [...prevTasks]); // Revert to previous state
     }
   };
 
@@ -435,8 +485,6 @@ const Dashboard = () => {
                   ))}
                 </div>
               </div>
-
-              {/* <Todo filteredTasks={filteredTasks} /> */}
 
               {/* In Progress Column */}
               <div className={styles.column}>
