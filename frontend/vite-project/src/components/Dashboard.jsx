@@ -50,30 +50,30 @@ const Dashboard = () => {
     }
   }, [loggedIn, userObject, navigate]);
 
-  useEffect(() => {
-    const fetchPeopleList = async () => {
-      try {
-        console.log(userId);
-        const response = await fetch(
-          `https://task-manager-0yqb.onrender.com/api/user/${userId}/people-list`
-        );
-        if (!response.ok) {
-          throw new Error(`Error: ${response.status} - ${response.statusText}`);
-        }
+  // useEffect(() => {
+  //   const fetchPeopleList = async () => {
+  //     try {
+  //       console.log(userId);
+  //       const response = await fetch(
+  //         `https://task-manager-0yqb.onrender.com/api/user/${userId}/people-list`
+  //       );
+  //       if (!response.ok) {
+  //         throw new Error(`Error: ${response.status} - ${response.statusText}`);
+  //       }
 
-        const data = await response.json();
-        console.log(data);
-        setPeopleList(data);
-        console.log([peopleList]);
-        setIsPeopleListUpdated(false);
-      } catch (error) {
-        console.error("Error fetching people list:", error);
-        console.log(error);
-      }
-    };
+  //       const data = await response.json();
+  //       console.log(data);
+  //       setPeopleList(data);
+  //       console.log([peopleList]);
+  //       setIsPeopleListUpdated(false);
+  //     } catch (error) {
+  //       console.error("Error fetching people list:", error);
+  //       console.log(error);
+  //     }
+  //   };
 
-    fetchPeopleList();
-  }, [userId, isPeopleListUpdated]);
+  //   fetchPeopleList();
+  // }, [userId, isPeopleListUpdated]);
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -151,7 +151,7 @@ const Dashboard = () => {
           {
             params: { period },
             // Add timeout to prevent hanging
-            timeout: 5000,
+            timeout: 12000,
           }
         );
         setFilteredTasks(response.data);
