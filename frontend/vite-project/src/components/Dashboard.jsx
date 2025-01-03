@@ -484,18 +484,20 @@ const Dashboard = () => {
                   />
                 </div>
                 <div className={styles.columnContent}>
-                  {filteredTasks.map((task) => (
-                    <TaskCard
-                      key={task._id}
-                      task={task}
-                      onChangeStatus={handleChangeStatus}
-                      refreshTasks={setrefreshTasks}
-                      handleShare={handleShare}
-                      checklistOpen={checklistOpenColumns.toDo}
-                      setChecklistOpenColumns={setChecklistOpenColumns}
-                      columnName={"toDo"}
-                    />
-                  ))}
+                  {filteredTasks
+                    .filter((task) => task.status !== "Done")
+                    .map((task) => (
+                      <TaskCard
+                        key={task._id}
+                        task={task}
+                        onChangeStatus={handleChangeStatus}
+                        refreshTasks={setrefreshTasks}
+                        handleShare={handleShare}
+                        checklistOpen={checklistOpenColumns.toDo}
+                        setChecklistOpenColumns={setChecklistOpenColumns}
+                        columnName={"toDo"}
+                      />
+                    ))}
                 </div>
               </div>
 
