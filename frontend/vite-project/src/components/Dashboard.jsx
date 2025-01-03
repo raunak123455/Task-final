@@ -98,64 +98,58 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (!loggedIn) {
-      // Redirect to login if not logged in
       navigate("/");
-    } else if (userObject) {
-      setUserId(userObject.id);
-      console.log(userId);
     }
-  }, [loggedIn, userObject, navigate]);
+  }, [loggedIn, navigate]);
 
-  // useEffect(() => {
-  //   const fetchPeopleList = async () => {
-  //     try {
-  //       console.log(userId);
-  //       const response = await fetch(
-  //         `https://task-manager-0yqb.onrender.com/api/user/${userId}/people-list`
-  //       );
-  //       if (!response.ok) {
-  //         throw new Error(`Error: ${response.status} - ${response.statusText}`);
-  //       }
+  useEffect(() => {
+    const fetchPeopleList = async () => {
+      try {
+        if (!userObject?.id) return;
 
-  //       const data = await response.json();
-  //       console.log(data);
-  //       setPeopleList(data);
-  //       console.log([peopleList]);
-  //       setIsPeopleListUpdated(false);
-  //     } catch (error) {
-  //       console.error("Error fetching people list:", error);
-  //       console.log(error);
-  //     }
-  //   };
+        const response = await fetch(
+          `https://task-manager-0yqb.onrender.com/api/user/${userObject.id}/people-list`
+        );
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status} - ${response.statusText}`);
+        }
 
-  //   fetchPeopleList();
-  // }, [userId, isPeopleListUpdated]);
+        const data = await response.json();
+        setPeopleList(data);
+        setIsPeopleListUpdated(false);
+      } catch (error) {
+        console.error("Error fetching people list:", error);
+      }
+    };
 
-  // useEffect(() => {
-  //   // Define an asynchronous function to fetch tasks
-  //   const fetchTasks = async () => {
-  //     console.log(mail);
-  //     try {
-  //       const response = await fetch(`
-  //         https://task-manager-0yqb.onrender.com/api/user/tasks-posted/${mail}`);
+    fetchPeopleList();
+  }, [userObject?.id, isPeopleListUpdated]);
 
-  //       if (!response.ok) {
-  //         throw new Error("Failed to fetch tasks.");
-  //       }
+  useEffect(() => {
+    // Define an asynchronous function to fetch tasks
+    const fetchTasks = async () => {
+      console.log(mail);
+      try {
+        const response = await fetch(`
+          https://task-manager-0yqb.onrender.com/api/user/tasks-posted/${mail}`);
 
-  //       const data = await response.json();
-  //       setTasks(data); // Set fetched tasks in state
-  //       console.log(tasks);
-  //     } catch (err) {
-  //       console.log(err); // Handle any errors
-  //     }
-  //   };
+        if (!response.ok) {
+          throw new Error("Failed to fetch tasks.");
+        }
 
-  //   // Only fetch if email is provided
-  //   if (mail) {
-  //     fetchTasks();
-  //   }
-  // }, [mail, TaskToEdit, refreshTasks]);
+        const data = await response.json();
+        setTasks(data); // Set fetched tasks in state
+        console.log(tasks);
+      } catch (err) {
+        console.log(err); // Handle any errors
+      }
+    };
+
+    // Only fetch if email is provided
+    if (mail) {
+      fetchTasks();
+    }
+  }, [mail, TaskToEdit, refreshTasks]);
 
   const closeChecklistsInColumn = (columnName) => {
     setChecklistOpenColumns((prev) => ({ ...prev, [columnName]: false }));
@@ -170,9 +164,9 @@ const Dashboard = () => {
   //   console.log(checklistOpenColumns);
   // };
 
-  // useEffect(() => {
-  //   console.log(checklistOpenColumns);
-  // }, [checklistOpenColumns]);
+  useEffect(() => {
+    console.log(checklistOpenColumns);
+  }, [checklistOpenColumns]);
 
   const handleShare = (task) => {
     const taskLink = `${window.location.origin}/tasks/${task._id}`;
@@ -221,10 +215,10 @@ const Dashboard = () => {
   // const filteredTasks = filterTasksByTimePeriod(selectedPeriod);
 
   // Fetch tasks when component mounts or period changes
-  // useEffect(() => {
-  //   filterTasksByTimePeriod(selectedPeriod);
-  //   console.log(selectedPeriod);
-  // }, [selectedPeriod, refreshTasks]);
+  useEffect(() => {
+    filterTasksByTimePeriod(selectedPeriod);
+    console.log(selectedPeriod);
+  }, [selectedPeriod, refreshTasks]);
 
   const today = new Date();
   const formattedDate = today.toLocaleDateString("en-US", {
