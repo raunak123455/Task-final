@@ -198,40 +198,41 @@ router.post("/save", async (req, res) => {
   try {
     const { title, priority, checklist, dueDate, assignTo, postedBy } =
       req.body;
+    console.log("Saving task with data:", { title, assignTo, postedBy });
 
     const formattedChecklist = checklist.map((item) => ({
-      item: String(item.item), // Cast `item` explicitly as a String
-      isCompleted: Boolean(item.isCompleted), // Cast `isCompleted` as a Boolean
+      item: String(item.item),
+      isCompleted: Boolean(item.isCompleted),
     }));
 
-    // Create a new task instance
     const newTask = new Task({
       title,
       priority,
-      checklist: formattedChecklist, // Use formatted checklist
+      checklist: formattedChecklist,
       dueDate,
       assignTo,
+      peopleWithAccess: [postedBy], // Add the poster to peopleWithAccess
     });
 
     const savedTask = await newTask.save();
+    console.log("Task saved:", savedTask);
 
+    // Update user references
     await User.findOneAndUpdate(
       { email: postedBy },
-      { $push: { tasksPosted: savedTask._id } },
-      { new: true }
+      { $push: { tasksPosted: savedTask._id } }
     );
 
     if (assignTo !== postedBy) {
       await User.findOneAndUpdate(
         { email: assignTo },
-        { $push: { tasksAssigned: savedTask._id } },
-        { new: true }
+        { $push: { tasksAssigned: savedTask._id } }
       );
     }
 
     res.status(201).json(savedTask);
   } catch (error) {
-    console.error(error);
+    console.error("Error saving task:", error);
     res.status(500).json({ error: "Failed to create task" });
   }
 });
@@ -259,20 +260,20 @@ router.get("/tasks-posted/:email", async (req, res) => {
   const { email } = req.params;
 
   try {
-    // Find user by email and populate tasksPosted field
-    const user = await User.findOne({ email }).populate("tasksPosted");
+    console.log("Fetching tasks for email:", email);
 
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    // Retrieve tasks posted by the user or shared with them
+    // Find tasks where either:
+    // 1. The task is assigned to the user
+    // 2. The task has the user in peopleWithAccess
     const tasks = await Task.find({
-      $or: [
-        { assignTo: user.email }, // Tasks assigned to the user
-        { peopleWithAccess: user.email }, // Tasks shared with the user
-      ],
+      $or: [{ assignTo: email }, { peopleWithAccess: email }],
     });
+
+    console.log("Found tasks:", tasks);
+
+    if (!tasks || tasks.length === 0) {
+      console.log("No tasks found for email:", email);
+    }
 
     res.json(tasks);
   } catch (error) {
