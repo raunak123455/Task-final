@@ -125,19 +125,41 @@ const Dashboard = () => {
     fetchPeopleList();
   }, [userObject?.id, isPeopleListUpdated]);
 
-  const filterTasksByTimePeriod = React.useCallback(async (period) => {
-    try {
-      const response = await axios.get(
-        `https://task-manager-0yqb.onrender.com/api/user/filtertasks`,
-        {
-          params: { period },
-        }
-      );
-      setFilteredTasks(response.data);
-    } catch (error) {
-      console.error("Error fetching filtered tasks:", error);
-    }
-  }, []);
+  const filterTasksByTimePeriod = React.useCallback(() => {
+    const now = new Date();
+    console.log("Current tasks:", tasks); // Debug log
+
+    const filteredResults = tasks.filter((task) => {
+      if (!task.dueDate) return false;
+
+      const dueDate = new Date(task.dueDate);
+
+      switch (selectedPeriod) {
+        case "thisWeek":
+          const startOfWeek = new Date(now);
+          startOfWeek.setDate(now.getDate() - now.getDay());
+          const endOfWeek = new Date(startOfWeek);
+          endOfWeek.setDate(startOfWeek.getDate() + 6);
+          return dueDate >= startOfWeek && dueDate <= endOfWeek;
+        case "thisMonth":
+          return (
+            dueDate.getMonth() === now.getMonth() &&
+            dueDate.getFullYear() === now.getFullYear()
+          );
+        case "thisYear":
+          return dueDate.getFullYear() === now.getFullYear();
+        default:
+          return true;
+      }
+    });
+
+    console.log("Filtered results:", filteredResults); // Debug log
+    setFilteredTasks(filteredResults);
+  }, [tasks, selectedPeriod]);
+
+  useEffect(() => {
+    filterTasksByTimePeriod();
+  }, [tasks, selectedPeriod]);
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -147,7 +169,9 @@ const Dashboard = () => {
       }
 
       try {
-        console.log("Fetching tasks for email:", mail);
+        console.log("Current user email (mail):", mail);
+        console.log("Current userObject:", userObject);
+
         const response = await fetch(
           `https://task-manager-0yqb.onrender.com/api/user/tasks-posted/${mail}`
         );
@@ -165,7 +189,7 @@ const Dashboard = () => {
     };
 
     fetchTasks();
-  }, [mail, TaskToEdit, refreshTasks]);
+  }, [mail, TaskToEdit, refreshTasks, userObject]);
 
   const closeChecklistsInColumn = (columnName) => {
     setChecklistOpenColumns((prev) => ({ ...prev, [columnName]: false }));
@@ -211,12 +235,10 @@ const Dashboard = () => {
   //   });
   // };
 
-  // const filteredTasks = filterTasksByTimePeriod(tasks);
-
   // Fetch tasks when component mounts or period changes
-  useEffect(() => {
-    filterTasksByTimePeriod(selectedPeriod);
-  }, [selectedPeriod, refreshTasks, filterTasksByTimePeriod]);
+  // useEffect(() => {
+  //   filterTasksByTimePeriod(selectedPeriod);
+  // }, [selectedPeriod, refreshTasks, filterTasksByTimePeriod]);
 
   const today = new Date();
   const formattedDate = today.toLocaleDateString("en-US", {
