@@ -200,18 +200,16 @@ router.post("/save", async (req, res) => {
       req.body;
     console.log("Saving task with data:", { title, assignTo, postedBy });
 
-    const formattedChecklist = checklist.map((item) => ({
-      item: String(item.item),
-      isCompleted: Boolean(item.isCompleted),
-    }));
-
     const newTask = new Task({
       title,
       priority,
-      checklist: formattedChecklist,
+      checklist: checklist.map((item) => ({
+        item: String(item.item),
+        isCompleted: Boolean(item.isCompleted),
+      })),
       dueDate,
       assignTo,
-      peopleWithAccess: [postedBy], // Add the poster to peopleWithAccess
+      peopleWithAccess: [postedBy, assignTo], // Add both poster and assignee
     });
 
     const savedTask = await newTask.save();
@@ -222,13 +220,6 @@ router.post("/save", async (req, res) => {
       { email: postedBy },
       { $push: { tasksPosted: savedTask._id } }
     );
-
-    if (assignTo !== postedBy) {
-      await User.findOneAndUpdate(
-        { email: assignTo },
-        { $push: { tasksAssigned: savedTask._id } }
-      );
-    }
 
     res.status(201).json(savedTask);
   } catch (error) {
@@ -265,16 +256,21 @@ router.get("/tasks-posted/:email", async (req, res) => {
     // Find tasks where either:
     // 1. The task is assigned to the user
     // 2. The task has the user in peopleWithAccess
+    // 3. The task was posted by the user (new condition)
     const tasks = await Task.find({
       $or: [{ assignTo: email }, { peopleWithAccess: email }],
     });
 
-    console.log("Found tasks:", tasks);
-
+    // If no tasks found, try finding the user and get their posted tasks
     if (!tasks || tasks.length === 0) {
-      console.log("No tasks found for email:", email);
+      const user = await User.findOne({ email }).populate("tasksPosted");
+      if (user && user.tasksPosted.length > 0) {
+        console.log("Found tasks from user's tasksPosted:", user.tasksPosted);
+        return res.json(user.tasksPosted);
+      }
     }
 
+    console.log("Found tasks:", tasks);
     res.json(tasks);
   } catch (error) {
     console.error("Error fetching tasks:", error);
