@@ -125,30 +125,35 @@ const Dashboard = () => {
     fetchPeopleList();
   }, [userObject?.id, isPeopleListUpdated]);
 
+  const filterTasksByTimePeriod = React.useCallback(async (period) => {
+    try {
+      const response = await axios.get(
+        `https://task-manager-0yqb.onrender.com/api/user/filtertasks`,
+        {
+          params: { period },
+        }
+      );
+      setFilteredTasks(response.data);
+    } catch (error) {
+      console.error("Error fetching filtered tasks:", error);
+    }
+  }, []);
+
   useEffect(() => {
-    // Define an asynchronous function to fetch tasks
     const fetchTasks = async () => {
-      console.log(mail);
+      if (!mail) return;
       try {
         const response = await fetch(`
           https://task-manager-0yqb.onrender.com/api/user/tasks-posted/${mail}`);
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch tasks.");
-        }
-
+        if (!response.ok) throw new Error("Failed to fetch tasks.");
         const data = await response.json();
-        setTasks(data); // Set fetched tasks in state
-        console.log(tasks);
+        setTasks(data);
       } catch (err) {
-        console.log(err); // Handle any errors
+        console.error(err);
       }
     };
 
-    // Only fetch if email is provided
-    if (mail) {
-      fetchTasks();
-    }
+    fetchTasks();
   }, [mail, TaskToEdit, refreshTasks]);
 
   const closeChecklistsInColumn = (columnName) => {
@@ -197,28 +202,10 @@ const Dashboard = () => {
 
   // const filteredTasks = filterTasksByTimePeriod(tasks);
 
-  const filterTasksByTimePeriod = async (period) => {
-    try {
-      const response = await axios.get(
-        `https://task-manager-0yqb.onrender.com/api/user/filtertasks`,
-        {
-          params: { period },
-        }
-      );
-      console.log(response.data);
-      setFilteredTasks(response.data);
-    } catch (error) {
-      console.error("Error fetching filtered tasks:", error);
-    }
-  };
-
-  // const filteredTasks = filterTasksByTimePeriod(selectedPeriod);
-
   // Fetch tasks when component mounts or period changes
   useEffect(() => {
     filterTasksByTimePeriod(selectedPeriod);
-    console.log(selectedPeriod);
-  }, [selectedPeriod, refreshTasks]);
+  }, [selectedPeriod, refreshTasks, filterTasksByTimePeriod]);
 
   const today = new Date();
   const formattedDate = today.toLocaleDateString("en-US", {
@@ -407,14 +394,13 @@ const Dashboard = () => {
               </div>
 
               <select
-                onSelect={setrefreshTasks((prev) => !prev)}
-                // onChange={(e) => setTimePeriod(e.target.value)}
+                value={selectedPeriod}
                 onChange={(e) => setSelectedPeriod(e.target.value)}
                 className={styles.periodSelect}
               >
-                <option value="This week">This week</option>
-                <option value="This month">This month</option>
-                <option value="This year">This year</option>
+                <option value="thisWeek">This week</option>
+                <option value="thisMonth">This month</option>
+                <option value="thisYear">This year</option>
               </select>
             </div>
 
