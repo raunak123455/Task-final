@@ -141,15 +141,26 @@ const Dashboard = () => {
 
   useEffect(() => {
     const fetchTasks = async () => {
-      if (!mail) return;
+      if (!mail) {
+        console.log("No email available, skipping fetch");
+        return;
+      }
+
       try {
-        const response = await fetch(`
-          https://task-manager-0yqb.onrender.com/api/user/tasks-posted/${mail}`);
-        if (!response.ok) throw new Error("Failed to fetch tasks.");
+        console.log("Fetching tasks for email:", mail);
+        const response = await fetch(
+          `https://task-manager-0yqb.onrender.com/api/user/tasks-posted/${mail}`
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
         const data = await response.json();
+        console.log("Received tasks:", data);
         setTasks(data);
       } catch (err) {
-        console.error(err);
+        console.error("Error fetching tasks:", err);
       }
     };
 
