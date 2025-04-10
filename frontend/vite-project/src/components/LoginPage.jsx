@@ -12,6 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -19,7 +20,7 @@ const LoginPage = () => {
 
   const { updateUser } = useUser();
   const { mail, setMail } = useUser();
-  const { setLoggedIn, setUserObject, userObject, loggedIn } = useUser();
+  const { setLoggedIn, setUserObject, loggedIn } = useUser();
 
   const [error, setError] = useState(null);
   const navigate = useNavigate();
@@ -54,18 +55,22 @@ const LoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
+    setIsLoading(true);
 
     try {
-      const response = await fetch("https://task-manager-0yqb.onrender.com/api/user/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password,
-        }),
-      });
+      const response = await fetch(
+        "https://task-manager-0yqb.onrender.com/api/user/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: formData.email,
+            password: formData.password,
+          }),
+        }
+      );
 
       const result = await response.json();
 
@@ -95,8 +100,10 @@ const LoginPage = () => {
           result.message || "Login failed. Please check your credentials."
         );
       }
-    } catch (err) {
+    } catch (error) {
       setError("Server error. Please try again later.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -133,6 +140,7 @@ const LoginPage = () => {
                     required
                     value={formData.email}
                     onChange={handleInputChange}
+                    disabled={isLoading}
                   />
                 </div>
               </div>
@@ -149,12 +157,14 @@ const LoginPage = () => {
                     required
                     value={formData.password}
                     onChange={handleInputChange}
+                    disabled={isLoading}
                   />
                 </div>
                 <button
                   type="button"
                   className={styles.passwordToggle}
                   onClick={togglePassword}
+                  disabled={isLoading}
                 >
                   {/* {showPassword ? <EyeOff size={20} /> : <Eye size={20} />} */}
                 </button>
@@ -163,8 +173,19 @@ const LoginPage = () => {
 
             {error && <p className={styles.errorText}>{error}</p>}
 
-            <button type="submit" className={styles.loginButton}>
-              Log in
+            <button
+              type="submit"
+              className={styles.loginButton}
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <div className={styles.spinnerContainer}>
+                  <div className={styles.spinner}></div>
+                  <span>Logging in...</span>
+                </div>
+              ) : (
+                "Log in"
+              )}
             </button>
 
             <div className={styles.registerContainer}>
@@ -173,6 +194,7 @@ const LoginPage = () => {
                 type="button"
                 className={styles.registerLink}
                 onClick={handleSignupRedirect}
+                disabled={isLoading}
               >
                 Register
               </button>
