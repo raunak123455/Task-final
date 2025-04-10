@@ -12,6 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -35,25 +36,30 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
+    setIsLoading(true);
 
     // Check if passwords match
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match!");
+      setIsLoading(false);
       return;
     }
 
     try {
-      const response = await fetch("https://task-manager-0yqb.onrender.com/api/user/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          password: formData.password,
-        }),
-      });
+      const response = await fetch(
+        "https://task-manager-0yqb.onrender.com/api/user/register",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: formData.name,
+            email: formData.email,
+            password: formData.password,
+          }),
+        }
+      );
 
       const result = await response.json();
 
@@ -75,8 +81,10 @@ const Register = () => {
         // Handle registration errors
         setError(result.message || "Registration failed.");
       }
-    } catch (err) {
+    } catch (error) {
       setError("Server error. Please try again later.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -114,6 +122,7 @@ const Register = () => {
                     required
                     value={formData.name}
                     onChange={handleInputChange}
+                    disabled={isLoading}
                   />
                 </div>
               </div>
@@ -130,6 +139,7 @@ const Register = () => {
                     required
                     value={formData.email}
                     onChange={handleInputChange}
+                    disabled={isLoading}
                   />
                 </div>
               </div>
@@ -146,6 +156,7 @@ const Register = () => {
                     required
                     value={formData.password}
                     onChange={handleInputChange}
+                    disabled={isLoading}
                   />
                 </div>
               </div>
@@ -162,12 +173,14 @@ const Register = () => {
                     required
                     value={formData.confirmPassword}
                     onChange={handleInputChange}
+                    disabled={isLoading}
                   />
                 </div>
                 <button
                   type="button"
                   className={styles.passwordToggle}
                   onClick={togglePassword}
+                  disabled={isLoading}
                 >
                   {/* {showPassword ? <EyeOff size={20} /> : <Eye size={20} />} */}
                 </button>
@@ -176,8 +189,19 @@ const Register = () => {
 
             {error && <p className={styles.errorText}>{error}</p>}
 
-            <button type="submit" className={styles.loginButton}>
-              Sign Up
+            <button
+              type="submit"
+              className={styles.loginButton}
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <div className={styles.spinnerContainer}>
+                  <div className={styles.spinner}></div>
+                  <span>Signing up...</span>
+                </div>
+              ) : (
+                "Sign Up"
+              )}
             </button>
 
             <div className={styles.registerContainer}>
@@ -186,6 +210,7 @@ const Register = () => {
                 type="button"
                 className={styles.registerLink}
                 onClick={handleLoginRedirect}
+                disabled={isLoading}
               >
                 Login
               </button>
