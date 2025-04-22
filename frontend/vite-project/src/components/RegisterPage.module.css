@@ -1,7 +1,14 @@
 .container {
   display: flex;
   min-height: 100vh;
-  width: 1534px;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 
 .errorText {
@@ -173,9 +180,16 @@
   text-decoration: underline;
 }
 
+@media (max-width: 1668px) {
+  .backimg {
+    display: none;
+  }
+}
+
 @media (max-width: 768px) {
   .container {
     flex-direction: column;
+    width: 100%;
   }
 
   .leftSection,
@@ -186,15 +200,75 @@
 
   .leftSection {
     min-height: 40vh;
+    padding: 2rem 1rem;
   }
 
   .astronautImage {
-    width: 150px;
-    height: 150px;
+    width: 120px;
+    height: 120px;
   }
 
   .welcomeText {
-    font-size: 1.75rem;
+    font-size: 1.5rem;
+  }
+
+  .subText {
+    font-size: 1rem;
+  }
+
+  .loginContainer {
+    padding: 0 1rem;
+  }
+
+  .formInput {
+    width: 100%;
+  }
+
+  .loginButton,
+  .registerLink {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .leftSection {
+    min-height: 35vh;
+  }
+
+  .astronautImage {
+    width: 80px;
+    height: 80px;
+  }
+
+  .welcomeText {
+    font-size: 1.25rem;
+  }
+
+  .subText {
+    font-size: 0.9rem;
+  }
+
+  .loginTitle {
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .formGroup {
+    margin-bottom: 1rem;
+  }
+
+  .formInput {
+    height: 45px;
+  }
+
+  .formInput > input {
+    font-size: 0.9rem;
+  }
+
+  .loginButton,
+  .registerLink {
+    padding: 0.8rem;
+    font-size: 0.9rem;
   }
 }
 
