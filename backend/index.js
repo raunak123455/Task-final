@@ -17,6 +17,14 @@ app.get("/", (req, res) => {
   res.send("App working lad");
 });
 
+app.get("/ping", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "Server is alive",
+    timestamp: new Date(),
+  });
+});
+
 app.use(cors());
 app.use(bodyParser.json());
 
