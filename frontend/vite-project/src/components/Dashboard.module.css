@@ -4,6 +4,12 @@
   width: 100vw;
   background-color: white;
   overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* Hide scrollbar on the body/html level */
+:global(body) {
+  overflow-x: hidden;
 }
 
 /* Sidebar Styles */
@@ -179,7 +185,8 @@
 
 .boardleft {
   display: flex;
-  gap: 20px;
+  align-items: center;
+  gap: 12px;
 }
 
 .boardHeader h2 {
@@ -196,9 +203,8 @@
   cursor: pointer;
   font-size: 14px;
   height: 34px;
-  position: absolute;
-  top: 32%;
-  left: 7%;
+  padding: 0 12px;
+  position: static;
 }
 
 .date {
@@ -208,10 +214,9 @@
 }
 
 .addPeople {
-  position: absolute;
-  left: 64px;
-  top: 40%;
-  width: 14px;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
 }
 
 .addPeopleButton:hover {
@@ -401,10 +406,99 @@
 }
 
 /* Responsive Styles */
+@media (max-width: 1300px) {
+  .sidebar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    flex-shrink: 0;
+  }
+
+  .mainContent {
+    overflow-x: auto;
+    overflow-y: auto;
+  }
+
+  .kanbanBoard {
+    display: flex;
+    overflow-x: auto;
+    gap: 10px;
+    min-width: 0;
+    width: 100%;
+  }
+
+  .kanbanBoard::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  .kanbanBoard::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+  }
+
+  .kanbanBoard::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+  }
+
+  .kanbanBoard::-webkit-scrollbar-thumb:hover {
+    background: #a1a1a1;
+  }
+
+  .column {
+    width: 280px;
+    flex-shrink: 0;
+  }
+}
+
 @media (max-width: 800px) {
+  .sidebar {
+    width: 180px;
+    padding: 16px 12px;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    flex-shrink: 0;
+  }
+
+  .logo {
+    margin-bottom: 24px;
+  }
+
+  .logo img {
+    width: 24px;
+    height: 24px;
+  }
+
+  .iteem {
+    font-size: 13px;
+  }
+
+  .nav {
+    gap: 8px;
+    margin-bottom: auto;
+  }
+
+  .navItem {
+    padding: 10px;
+    gap: 8px;
+  }
+
+  .logoutButton {
+    padding: 10px;
+    gap: 8px;
+  }
+
+  .mainContent {
+    overflow-x: auto;
+    overflow-y: auto;
+  }
+
   .analyticsGrid {
     display: grid;
-    grid-template-columns: 1fr; /* Two columns */
+    grid-template-columns: 1fr;
     gap: 20px;
   }
 
@@ -418,39 +512,6 @@
 
   .analyticsBox {
     width: 50%;
-  }
-  .logo {
-    width: 50px;
-  }
-  .iteem {
-    width: 20px;
-    font-size: 12px;
-  }
-
-  .nav {
-    width: 80px;
-    margin-top: 190px;
-  }
-  .navItem {
-    display: flex;
-    align-items: center;
-    gap: 1px;
-    padding: 2px;
-    border-radius: 8px;
-    color: #666;
-    text-decoration: none;
-    transition: background-color 0.2s;
-    height: 20px;
-    width: 60px;
-  }
-
-  .pro {
-    width: 10px;
-    color: black;
-  }
-  .sidebar {
-    width: 220px;
-    padding: 3px;
   }
 
   .boardHeader {
@@ -470,12 +531,29 @@
     padding: 5px 4px;
   }
   .kanbanBoard {
-    /* grid-template-columns: repeat(2, 1fr); */
-    /* display: flex;
-    flex-direction: column;
-    width: 280px; */
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    display: flex;
+    overflow-x: auto;
+    gap: 10px;
+    min-width: 0;
+    width: 100%;
+  }
+
+  .kanbanBoard::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  .kanbanBoard::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+  }
+
+  .kanbanBoard::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+  }
+
+  .kanbanBoard::-webkit-scrollbar-thumb:hover {
+    background: #a1a1a1;
   }
 
   .addPeopleButton {
@@ -487,24 +565,67 @@
   .column {
     width: 250px;
     padding: 8px;
+    flex-shrink: 0;
   }
 }
 
 @media (max-width: 768px) {
   .container {
-    width: 109vw;
+    width: 100vw;
+    overflow-x: hidden;
   }
+
   .sidebar {
-    width: 150px;
+    width: 160px;
+    padding: 12px 8px;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    flex-shrink: 0;
   }
 
-  .logo span,
-  .navItem span,
-  .logoutButton span {
-    display: none;
+  .logo {
+    margin-bottom: 20px;
   }
 
-  /* .kanbanBoard {
-    grid-template-columns: 1fr;
-  } */
+  .logo img {
+    width: 20px;
+    height: 20px;
+  }
+
+  .iteem {
+    font-size: 12px;
+  }
+
+  .nav {
+    gap: 6px;
+  }
+
+  .navItem {
+    padding: 8px;
+    gap: 6px;
+  }
+
+  .logoutButton {
+    padding: 8px;
+    gap: 6px;
+  }
+
+  .mainContent {
+    overflow-x: auto;
+    overflow-y: auto;
+  }
+
+  .kanbanBoard {
+    display: flex;
+    overflow-x: auto;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .column {
+    width: 240px;
+    flex-shrink: 0;
+  }
 }

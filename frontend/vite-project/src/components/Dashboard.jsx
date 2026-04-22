@@ -413,17 +413,18 @@ const Dashboard = () => {
             <div className={styles.boardHeader}>
               <div className={styles.boardleft}>
                 <h2>Board</h2>
+                <img
+                  src={People}
+                  className={styles.addPeople}
+                  alt="Add People"
+                  onClick={() => setIsModalOpen(true)}
+                />
                 <button
                   className={styles.addPeopleButton}
                   onClick={() => setIsModalOpen(true)}
                 >
                   Add People
                 </button>
-                <img
-                  src={People}
-                  className={styles.addPeople}
-                  alt="Add People"
-                />
               </div>
 
               <select
