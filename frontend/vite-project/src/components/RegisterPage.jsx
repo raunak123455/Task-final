@@ -47,7 +47,7 @@ const Register = () => {
 
     try {
       const response = await fetch(
-        "https://task-manager-0yqb.onrender.com/api/user/register",
+        "https://task-manager-tkx6.onrender.com/api/user/register",
         {
           method: "POST",
           headers: {
@@ -58,7 +58,7 @@ const Register = () => {
             email: formData.email,
             password: formData.password,
           }),
-        }
+        },
       );
 
       const result = await response.json();

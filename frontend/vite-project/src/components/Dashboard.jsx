@@ -108,7 +108,7 @@ const Dashboard = () => {
         if (!userObject?.id) return;
 
         const response = await fetch(
-          `https://task-manager-0yqb.onrender.com/api/user/${userObject.id}/people-list`
+          `https://task-manager-tkx6.onrender.com/api/user/${userObject.id}/people-list`,
         );
         if (!response.ok) {
           throw new Error(`Error: ${response.status} - ${response.statusText}`);
@@ -173,7 +173,7 @@ const Dashboard = () => {
         console.log("Current userObject:", userObject);
 
         const response = await fetch(
-          `https://task-manager-0yqb.onrender.com/api/user/tasks-posted/${mail}`
+          `https://task-manager-tkx6.onrender.com/api/user/tasks-posted/${mail}`,
         );
 
         if (!response.ok) {
@@ -254,8 +254,8 @@ const Dashboard = () => {
     console.log(userObject.id);
     try {
       const response = await axios.post(
-        "https://task-manager-0yqb.onrender.com/api/user/add-people",
-        { userId: userObject.id, email }
+        "https://task-manager-tkx6.onrender.com/api/user/add-people",
+        { userId: userObject.id, email },
       );
       setIsPeopleListUpdated((prev) => !prev);
     } catch (error) {
@@ -291,15 +291,15 @@ const Dashboard = () => {
       // Make API request to update the task status
       setTasks((prevTasks) =>
         prevTasks.map((task) =>
-          task._id === taskId ? { ...task, status: newStatus } : task
-        )
+          task._id === taskId ? { ...task, status: newStatus } : task,
+        ),
       );
       console.log(newStatus, "changed baby");
       const response = await axios.put(
-        `https://task-manager-0yqb.onrender.com/api/user/task/${taskId}/status`,
+        `https://task-manager-tkx6.onrender.com/api/user/task/${taskId}/status`,
         {
           status: newStatus,
-        }
+        },
       );
 
       if (response.status === 200) {
@@ -313,10 +313,10 @@ const Dashboard = () => {
   };
 
   const backlogTasks = filteredTasks.filter(
-    (task) => task.status === "Backlog"
+    (task) => task.status === "Backlog",
   );
   const inProgressTasks = filteredTasks.filter(
-    (task) => task.status === "In Progress"
+    (task) => task.status === "In Progress",
   );
   const doneTasks = filteredTasks.filter((task) => task.status === "Done");
 
@@ -325,7 +325,7 @@ const Dashboard = () => {
     (task) =>
       task.status === "To Do" ||
       task.status === "In Progress" ||
-      task.status === "Backlog"
+      task.status === "Backlog",
   ).length;
   const inProgressCount = inProgressTasks.length;
   const completedCount = doneTasks.length;

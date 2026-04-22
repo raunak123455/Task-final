@@ -59,7 +59,7 @@ const LoginPage = () => {
 
     try {
       const response = await fetch(
-        "https://task-manager-0yqb.onrender.com/api/user/login",
+        "https://task-manager-tkx6.onrender.com/api/user/login",
         {
           method: "POST",
           headers: {
@@ -69,7 +69,7 @@ const LoginPage = () => {
             email: formData.email,
             password: formData.password,
           }),
-        }
+        },
       );
 
       const result = await response.json();
@@ -97,7 +97,7 @@ const LoginPage = () => {
         }, 2000);
       } else {
         setError(
-          result.message || "Login failed. Please check your credentials."
+          result.message || "Login failed. Please check your credentials.",
         );
       }
     } catch (error) {

@@ -40,7 +40,9 @@ const TaskModal = ({
       setChecklistItems(TaskToEdit.checklist || []);
       setDueDate(TaskToEdit.dueDate ? new Date(TaskToEdit.dueDate) : null);
       setCompletedItems(
-        TaskToEdit.checklist.filter((item) => item.isCompleted).map((_, i) => i)
+        TaskToEdit.checklist
+          .filter((item) => item.isCompleted)
+          .map((_, i) => i),
       );
       setAssignTo(TaskToEdit.assignTo || "");
     }
@@ -59,7 +61,7 @@ const TaskModal = ({
     setCompletedItems(
       isCompleted
         ? completedItems.filter((i) => i !== index)
-        : [...completedItems, index]
+        : [...completedItems, index],
     );
   };
 
@@ -83,8 +85,8 @@ const TaskModal = ({
 
     try {
       const url = TaskToEdit
-        ? `https://task-manager-0yqb.onrender.com/api/user/edit/${TaskToEdit._id}` // Update task if TaskToEdit exists
-        : "https://task-manager-0yqb.onrender.com/api/user/save"; // Create new task otherwise
+        ? `https://task-manager-tkx6.onrender.com/api/user/edit/${TaskToEdit._id}` // Update task if TaskToEdit exists
+        : "https://task-manager-tkx6.onrender.com/api/user/save"; // Create new task otherwise
 
       const response = await fetch(url, {
         method: TaskToEdit ? "PUT" : "POST",

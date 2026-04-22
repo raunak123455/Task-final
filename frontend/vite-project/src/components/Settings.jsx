@@ -24,16 +24,19 @@ const Settings = () => {
     console.log("Starting form submission"); // Add this line
     console.log("Form data:", formData); // Log the data to verify it's correct
     try {
-      const response = await fetch("https://task-manager-0yqb.onrender.com/api/user/update", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        "https://task-manager-tkx6.onrender.com/api/user/update",
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: userObject.id,
+            ...formData,
+          }),
         },
-        body: JSON.stringify({
-          userId: userObject.id,
-          ...formData,
-        }),
-      });
+      );
       const result = await response.json();
       if (response.ok) {
         console.log("Request successful:", result); // Check if the request succeeded
