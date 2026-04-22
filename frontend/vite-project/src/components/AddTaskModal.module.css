@@ -14,12 +14,14 @@
 
 .modalContent {
   background-color: white;
-  padding: 20px;
-  border-radius: 8px;
-  width: 450px;
-
+  padding: 24px;
+  border-radius: 10px;
+  width: 480px;
   max-width: 90%;
+  max-height: 85vh;
+  overflow-y: auto;
   position: relative;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
 }
 
 .label {
@@ -177,6 +179,309 @@
   padding: 8px 16px;
   border-radius: 5px;
   cursor: pointer;
+}
+
+/* AI Panel Styles - Professional */
+.aiPanel {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-left: 3px solid #6366f1;
+  border-radius: 6px;
+  padding: 14px;
+  margin-bottom: 16px;
+}
+
+.aiHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.aiIcon {
+  color: #6366f1;
+  font-size: 16px;
+}
+
+.aiTitle {
+  font-weight: 600;
+  font-size: 12px;
+  color: #334155;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+.aiAnalyzing {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: #475569;
+}
+
+.aiSpinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid #cbd5e1;
+  border-top-color: #6366f1;
+  border-radius: 50%;
+  animation: aiSpin 0.7s linear infinite;
+}
+
+@keyframes aiSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.aiResults {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.aiBadges {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.aiBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: white;
+  padding: 3px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+}
+
+.badgeHigh {
+  background: #fef2f2;
+  color: #991b1b;
+  border-color: #fecaca;
+}
+
+.badgeModerate {
+  background: #fffbeb;
+  color: #92400e;
+  border-color: #fde68a;
+}
+
+.badgeLow {
+  background: #f0fdf4;
+  color: #166534;
+  border-color: #bbf7d0;
+}
+
+.aiInsightText {
+  font-size: 12px;
+  color: #64748b;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.aiApplyBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #f1f5f9;
+  color: #334155;
+  border: 1px solid #e2e8f0;
+  border-radius: 5px;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: fit-content;
+}
+
+.aiApplyBtn:hover {
+  background: #e2e8f0;
+  border-color: #cbd5e1;
+}
+
+/* AI Workload Card */
+.aiWorkloadCard {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: #f8fafc;
+  border-left: 3px solid #64748b;
+  border-radius: 0 6px 6px 0;
+  padding: 10px 12px;
+  margin-bottom: 16px;
+}
+
+.aiWorkloadIcon {
+  color: #64748b;
+  font-size: 14px;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.aiWorkloadLabel {
+  font-size: 10px;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.aiWorkloadText {
+  font-size: 12px;
+  color: #475569;
+  margin: 4px 0 0 0;
+  line-height: 1.4;
+}
+
+/* AI Checklist Suggestions */
+.aiChecklistPanel {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-left: 3px solid #0ea5e9;
+  border-radius: 6px;
+  padding: 14px;
+  margin-bottom: 16px;
+}
+
+.aiChecklistHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #334155;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.aiChecklistIcon {
+  color: #0ea5e9;
+  font-size: 14px;
+}
+
+.aiChecklistItems {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.aiChecklistChip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 5px;
+  padding: 8px 10px;
+  font-size: 12px;
+  color: #334155;
+}
+
+.aiChipAddBtn {
+  background: white;
+  color: #0ea5e9;
+  border: 1px solid #0ea5e9;
+  border-radius: 4px;
+  padding: 3px 10px;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.aiChipAddBtn:hover {
+  background: #0ea5e9;
+  color: white;
+}
+
+.aiAddAllBtn {
+  margin-top: 10px;
+  width: 100%;
+  background: white;
+  color: #0ea5e9;
+  border: 1px solid #0ea5e9;
+  border-radius: 5px;
+  padding: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.aiAddAllBtn:hover {
+  background: #0ea5e9;
+  color: white;
+}
+
+/* AI Date Suggestion */
+.aiDateSuggestion {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-left: 3px solid #10b981;
+  border-radius: 6px;
+  padding: 12px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.aiDateIcon {
+  color: #10b981;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.aiDateInfo {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 2px;
+}
+
+.aiDateLabel {
+  font-size: 10px;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.aiDateValue {
+  font-size: 13px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.aiDateReason {
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+.aiDateApplyBtn {
+  background: white;
+  color: #10b981;
+  border: 1px solid #10b981;
+  border-radius: 5px;
+  padding: 5px 14px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.aiDateApplyBtn:hover {
+  background: #10b981;
+  color: white;
 }
 
 @media (max-width: 500px) {
